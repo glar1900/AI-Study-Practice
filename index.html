@@ -635,7 +635,6 @@
           if (seats[currentOpenSeat] === 'available') {
             seats[currentOpenSeat] = 'occupied';
             saveSeatsToCache(seats);
-            console.log(`[${new Date().toLocaleTimeString()}] 좌석 ${currentOpenSeat} 마감 (페이지 로드 시 체크)`);
           }
           localStorage.removeItem(CURRENT_OPEN_SEAT_KEY);
           localStorage.removeItem(SEAT_OPEN_TIME_KEY);
@@ -649,7 +648,6 @@
             if (seats[currentOpenSeat] === 'available') {
               seats[currentOpenSeat] = 'occupied';
               saveSeatsToCache(seats);
-              console.log(`[${new Date().toLocaleTimeString()}] 좌석 ${currentOpenSeat} 마감`);
             }
             localStorage.removeItem(CURRENT_OPEN_SEAT_KEY);
             localStorage.removeItem(SEAT_OPEN_TIME_KEY);
@@ -675,15 +673,12 @@
         localStorage.setItem(CURRENT_OPEN_SEAT_KEY, randomSeat);
         localStorage.setItem(SEAT_OPEN_TIME_KEY, openTime.toString());
 
-        console.log(`[${new Date().toLocaleTimeString()}] 좌석 ${randomSeat} 오픈! (1초간 유효)`);
-
         // 1초 후 다시 예약됨으로 변경
         setTimeout(() => {
           const updatedSeats = loadSeatsFromCache();
           if (updatedSeats[randomSeat] === 'available') {
             updatedSeats[randomSeat] = 'occupied';
             saveSeatsToCache(updatedSeats);
-            console.log(`[${new Date().toLocaleTimeString()}] 좌석 ${randomSeat} 마감`);
           }
           localStorage.removeItem(CURRENT_OPEN_SEAT_KEY);
           localStorage.removeItem(SEAT_OPEN_TIME_KEY);
@@ -694,8 +689,6 @@
       const nextInterval = (Math.random() * 20 + 10) * 1000;
       const nextOpenTime = Date.now() + nextInterval;
       localStorage.setItem(NEXT_OPEN_TIME_KEY, nextOpenTime.toString());
-
-      console.log(`[${new Date().toLocaleTimeString()}] 다음 좌석 오픈: ${new Date(nextOpenTime).toLocaleTimeString()} (${Math.round(nextInterval / 1000)}초 후)`);
 
       setTimeout(openRandomSeat, nextInterval);
     }
@@ -708,12 +701,10 @@
       if (nextOpenTime && nextOpenTime > now) {
         // 이미 예약된 다음 오픈 시간이 있고 미래인 경우
         const waitTime = nextOpenTime - now;
-        console.log(`[${new Date().toLocaleTimeString()}] 예약된 다음 좌석 오픈 시간: ${new Date(nextOpenTime).toLocaleTimeString()} (${Math.round(waitTime / 1000)}초 후)`);
         setTimeout(openRandomSeat, waitTime);
       } else {
         // 예약된 시간이 없거나 이미 지난 경우 - 즉시 또는 짧은 시간 후 오픈
         const initialDelay = nextOpenTime ? 0 : (Math.random() * 3 + 2) * 1000;
-        console.log(`[${new Date().toLocaleTimeString()}] 새로운 타이머 시작 (${Math.round(initialDelay / 1000)}초 후 첫 오픈)`);
         setTimeout(openRandomSeat, initialDelay);
       }
     }
