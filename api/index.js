@@ -9,7 +9,7 @@ let bookings = [];
 
 function getSeatStatusAtTime(timestamp) {
   const CYCLE_DURATION = 20000;
-  const SEAT_OPEN_DURATION = 1500;
+  const SEAT_OPEN_DURATION = 2000;
 
   const cyclePosition = timestamp % CYCLE_DURATION;
   const isOpen = cyclePosition < SEAT_OPEN_DURATION;
