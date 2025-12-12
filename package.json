@@ -1,0 +1,24 @@
+{
+  "name": "ticketing-sim",
+  "version": "1.0.0",
+  "description": "티켓팅 시뮬레이션 - 웹 크롤링 실습",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "ticketing",
+    "simulation",
+    "web-crawling"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

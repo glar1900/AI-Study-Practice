@@ -35,19 +35,50 @@
       width: 100%;
     }
 
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
     h1 {
-      text-align: center;
       color: #2d3748;
-      margin-bottom: 10px;
       font-size: 2.5rem;
       font-weight: 700;
+    }
+
+    .user-info {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
     }
 
     .subtitle {
       text-align: center;
       color: #718096;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-size: 0.95rem;
+    }
+
+    .refresh-btn {
+      display: block;
+      margin: 0 auto 20px;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .refresh-btn:hover {
+      transform: translateY(-2px);
     }
 
     .screen {
@@ -59,7 +90,6 @@
       margin-bottom: 30px;
       font-weight: 600;
       letter-spacing: 2px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .seats-grid {
@@ -78,7 +108,6 @@
       justify-content: center;
       font-weight: 700;
       color: #4a5568;
-      font-size: 1rem;
     }
 
     .seat {
@@ -89,25 +118,6 @@
       transition: all 0.3s ease;
       font-size: 0.75rem;
       font-weight: 600;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .seat::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 50%;
-      transition: transform 0.4s ease;
-    }
-
-    .seat:hover::before {
-      transform: translate(-50%, -50%) scale(1);
     }
 
     .seat.occupied {
@@ -126,8 +136,13 @@
     .seat.selected {
       background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
       color: white;
-      box-shadow: 0 0 20px rgba(66, 153, 225, 0.8);
       transform: scale(1.1);
+    }
+
+    .seat.booked {
+      background: linear-gradient(135deg, #805ad5 0%, #6b46c1 100%);
+      color: white;
+      cursor: not-allowed;
     }
 
     @keyframes pulse {
@@ -145,7 +160,7 @@
     .legend {
       display: flex;
       justify-content: center;
-      gap: 30px;
+      gap: 20px;
       margin-bottom: 30px;
       flex-wrap: wrap;
     }
@@ -153,28 +168,20 @@
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .legend-box {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
     }
 
     .booking-panel {
       background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
       border-radius: 16px;
       padding: 30px;
-      margin-top: 30px;
-      min-height: 200px;
-      border: 2px solid #e2e8f0;
-    }
-
-    .booking-panel h2 {
-      color: #2d3748;
       margin-bottom: 20px;
-      font-size: 1.5rem;
     }
 
     .booking-info {
@@ -192,16 +199,6 @@
       border-bottom: 1px solid #cbd5e0;
     }
 
-    .info-label {
-      color: #4a5568;
-      font-weight: 600;
-    }
-
-    .info-value {
-      color: #2d3748;
-      font-weight: 700;
-    }
-
     .btn {
       padding: 14px 32px;
       border: none;
@@ -209,25 +206,19 @@
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s ease;
       margin-top: 20px;
       width: 100%;
       font-family: 'Noto Sans KR', sans-serif;
+      transition: all 0.3s;
     }
 
     .btn-primary {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
     }
 
     .modal {
@@ -238,7 +229,6 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -254,7 +244,6 @@
       padding: 40px;
       max-width: 400px;
       width: 90%;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
       animation: modalSlideIn 0.3s ease;
     }
 
@@ -273,14 +262,22 @@
     .modal h3 {
       color: #2d3748;
       margin-bottom: 20px;
-      font-size: 1.5rem;
       text-align: center;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      margin-bottom: 20px;
     }
 
     .modal-buttons {
       display: flex;
       gap: 15px;
-      margin-top: 30px;
     }
 
     .btn-confirm {
@@ -295,15 +292,20 @@
       flex: 1;
     }
 
-    .message {
+    .success-message {
       display: none;
       padding: 20px;
       border-radius: 12px;
-      margin-top: 20px;
+      margin-bottom: 20px;
       text-align: center;
       font-weight: 700;
-      font-size: 1.1rem;
+      background: linear-gradient(135deg, #9ae6b4 0%, #68d391 100%);
+      color: #22543d;
       animation: messageSlideIn 0.3s ease;
+    }
+
+    .success-message.active {
+      display: block;
     }
 
     @keyframes messageSlideIn {
@@ -318,42 +320,63 @@
       }
     }
 
-    .message.active {
-      display: block;
-    }
-
-    .message.success {
-      background: linear-gradient(135deg, #9ae6b4 0%, #68d391 100%);
-      color: #22543d;
-    }
-
-    .message.error {
-      background: linear-gradient(135deg, #feb2b2 0%, #fc8181 100%);
-      color: #742a2a;
-    }
-
-    .refresh-hint {
-      text-align: center;
-      color: #718096;
-      font-size: 0.9rem;
-      margin-top: 15px;
-      font-style: italic;
-    }
-
-    .timer {
-      text-align: center;
-      font-size: 0.85rem;
+    .error-message {
       color: #e53e3e;
+      text-align: center;
       margin-top: 10px;
       font-weight: 600;
+    }
+
+    .bookings-section {
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-radius: 16px;
+      padding: 30px;
+      margin-top: 20px;
+    }
+
+    .bookings-section h2 {
+      color: #2d3748;
+      margin-bottom: 20px;
+    }
+
+    .booking-item {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .booking-nickname {
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .booking-seat {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .booking-time {
+      font-size: 0.85rem;
+      color: #718096;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>🎟️ 티켓팅 시뮬레이션</h1>
-    <p class="subtitle">웹 크롤링 실습용 - 좌석은 랜덤하게 오픈됩니다 (새로고침하여 확인)</p>
+    <div class="header">
+      <h1>🎟️ 티켓팅 시뮬레이션</h1>
+      <div class="user-info" id="userInfo"></div>
+    </div>
+    <p class="subtitle">웹 크롤링 실습용 - 새로고침 버튼을 눌러 최신 좌석 정보를 확인하세요</p>
+
+    <button class="refresh-btn" id="refreshBtn" onclick="loadSeats()">🔄 좌석 새로고침</button>
+
+    <div id="successMessage" class="success-message"></div>
 
     <div class="screen">SCREEN</div>
 
@@ -362,15 +385,15 @@
     <div class="legend">
       <div class="legend-item">
         <div class="legend-box" style="background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);"></div>
-        <span>예약됨</span>
+        <span>예약 대기</span>
       </div>
       <div class="legend-item">
         <div class="legend-box" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);"></div>
         <span>예약가능</span>
       </div>
       <div class="legend-item">
-        <div class="legend-box" style="background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);"></div>
-        <span>선택됨</span>
+        <div class="legend-box" style="background: linear-gradient(135deg, #805ad5 0%, #6b46c1 100%);"></div>
+        <span>예약완료</span>
       </div>
     </div>
 
@@ -378,80 +401,134 @@
       <h2>예매 정보</h2>
       <div id="bookingInfo" class="booking-info">
         <div class="info-row">
-          <span class="info-label">좌석 번호</span>
-          <span class="info-value" id="seatNumber">-</span>
+          <span>좌석 번호</span>
+          <span id="seatNumber">-</span>
         </div>
         <div class="info-row">
-          <span class="info-label">등급</span>
-          <span class="info-value">일반석</span>
+          <span>등급</span>
+          <span>일반석</span>
         </div>
         <div class="info-row">
-          <span class="info-label">가격</span>
-          <span class="info-value">15,000원</span>
+          <span>가격</span>
+          <span>15,000원</span>
         </div>
-        <div class="info-row">
-          <span class="info-label">예매 시간</span>
-          <span class="info-value" id="bookingTime">-</span>
-        </div>
-        <div class="timer" id="timer"></div>
-        <button class="btn btn-primary" id="confirmBtn">확인</button>
+        <button class="btn btn-primary" onclick="showBookingConfirm()">확인</button>
+        <div id="errorMessage" class="error-message"></div>
       </div>
-      <p class="refresh-hint">💡 좌석 정보는 캐시되어 있습니다. 새로운 좌석을 보려면 새로고침하세요!</p>
     </div>
 
-    <div id="message" class="message"></div>
+    <div class="bookings-section">
+      <h2>📋 예매 현황</h2>
+      <div id="bookingsList"></div>
+    </div>
   </div>
 
-  <div id="modal" class="modal">
+  <!-- 닉네임 입력 모달 -->
+  <div id="nicknameModal" class="modal">
+    <div class="modal-content">
+      <h3>👤 닉네임 입력</h3>
+      <p style="text-align: center; color: #718096; margin-bottom: 20px;">
+        티켓팅에 참여하려면 닉네임이 필요합니다
+      </p>
+      <input type="text" id="nicknameInput" placeholder="닉네임을 입력하세요" maxlength="20">
+      <button class="btn btn-confirm" onclick="setNickname()">시작하기</button>
+    </div>
+  </div>
+
+  <!-- 예매 확인 모달 -->
+  <div id="confirmModal" class="modal">
     <div class="modal-content">
       <h3>예매를 확정하시겠습니까?</h3>
-      <p style="text-align: center; color: #718096; margin-top: 10px;">선택한 좌석을 예매합니다.</p>
+      <p style="text-align: center; color: #718096; margin-top: 10px;">
+        선택한 좌석: <strong id="confirmSeatId"></strong>
+      </p>
       <div class="modal-buttons">
-        <button class="btn btn-confirm" id="modalConfirm">확인</button>
-        <button class="btn btn-cancel" id="modalCancel">취소</button>
+        <button class="btn btn-confirm" onclick="confirmBooking()">확인</button>
+        <button class="btn btn-cancel" onclick="closeConfirmModal()">취소</button>
       </div>
     </div>
   </div>
 
   <script>
-    const ROWS = 10;
-    const COLS = 10;
-    const ROW_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-    const CACHE_KEY = 'ticketing_seat_cache';
-    const CACHE_TIMESTAMP_KEY = 'ticketing_cache_timestamp';
-    const NEXT_OPEN_TIME_KEY = 'ticketing_next_open_time';
-    const CURRENT_OPEN_SEAT_KEY = 'ticketing_current_open_seat';
-    const SEAT_OPEN_TIME_KEY = 'ticketing_seat_open_time';
-
+    const API_URL = window.location.origin;
+    let currentSeats = {};
     let selectedSeat = null;
-    let seatAvailableTime = null;
-    let bookingTimeLimit = null;
+    let nickname = '';
+
+    // 초기화
+    window.onload = function () {
+      nickname = localStorage.getItem('ticketing_nickname');
+      if (!nickname) {
+        document.getElementById('nicknameModal').classList.add('active');
+      } else {
+        document.getElementById('userInfo').textContent = `👤 ${nickname}`;
+        loadSeats();
+        loadBookings();
+      }
+    };
+
+    // 닉네임 설정
+    function setNickname() {
+      const input = document.getElementById('nicknameInput');
+      const value = input.value.trim();
+
+      if (!value) {
+        alert('닉네임을 입력해주세요');
+        return;
+      }
+
+      nickname = value;
+      localStorage.setItem('ticketing_nickname', nickname);
+      document.getElementById('userInfo').textContent = `👤 ${nickname}`;
+      document.getElementById('nicknameModal').classList.remove('active');
+      loadSeats();
+      loadBookings();
+    }
+
+    // 좌석 로드 (API 호출)
+    async function loadSeats() {
+      try {
+        const response = await fetch(`${API_URL}/api/seats`);
+        const data = await response.json();
+
+        currentSeats = data.seats;
+        createSeatsGrid();
+
+        console.log(`[${new Date().toLocaleTimeString()}] 좌석 정보 로드 완료`);
+        if (data.currentOpen) {
+          console.log(`  - 현재 오픈 좌석: ${data.currentOpen.seat}`);
+        }
+      } catch (error) {
+        console.error('좌석 로드 실패:', error);
+        alert('서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.');
+      }
+    }
 
     // 좌석 그리드 생성
     function createSeatsGrid() {
       const grid = document.getElementById('seatsGrid');
       grid.innerHTML = '';
 
-      // 헤더 (빈 셀 + 열 번호)
-      grid.appendChild(document.createElement('div')); // 빈 셀
+      const ROWS = 10;
+      const COLS = 10;
+      const ROW_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+      // 헤더
+      grid.appendChild(document.createElement('div'));
       for (let col = 1; col <= COLS; col++) {
-        const colLabel = document.createElement('div');
-        colLabel.className = 'row-label';
-        colLabel.textContent = col;
-        grid.appendChild(colLabel);
+        const label = document.createElement('div');
+        label.className = 'row-label';
+        label.textContent = col;
+        grid.appendChild(label);
       }
 
-      // 좌석 생성
-      const seatStates = loadSeatsFromCache();
-
+      // 좌석
       for (let row = 0; row < ROWS; row++) {
-        // 행 라벨
         const rowLabel = document.createElement('div');
         rowLabel.className = 'row-label';
         rowLabel.textContent = ROW_LABELS[row];
         grid.appendChild(rowLabel);
 
-        // 좌석
         for (let col = 1; col <= COLS; col++) {
           const seatId = `${ROW_LABELS[row]}${col}`;
           const seat = document.createElement('button');
@@ -459,261 +536,122 @@
           seat.dataset.seatId = seatId;
           seat.textContent = seatId;
 
-          const state = seatStates[seatId] || 'occupied';
+          const state = currentSeats[seatId] || 'occupied';
           seat.classList.add(state);
 
-          seat.addEventListener('click', () => handleSeatClick(seatId, seat));
+          if (state === 'available') {
+            seat.onclick = () => selectSeat(seatId);
+          }
+
           grid.appendChild(seat);
         }
       }
     }
 
-    // 캐시에서 좌석 상태 로드
-    function loadSeatsFromCache() {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        return JSON.parse(cached);
-      }
+    // 좌석 선택
+    function selectSeat(seatId) {
+      selectedSeat = seatId;
+      document.getElementById('seatNumber').textContent = seatId;
+      document.getElementById('bookingInfo').classList.add('active');
+      document.getElementById('errorMessage').textContent = '';
 
-      // 초기 상태: 모두 예약됨
-      const initial = {};
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 1; col <= COLS; col++) {
-          initial[`${ROW_LABELS[row]}${col}`] = 'occupied';
-        }
-      }
-      saveSeatsToCache(initial);
-      return initial;
-    }
-
-    // 캐시에 좌석 상태 저장
-    function saveSeatsToCache(seats) {
-      localStorage.setItem(CACHE_KEY, JSON.stringify(seats));
-      localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now());
-    }
-
-    // 좌석 클릭 핸들러
-    function handleSeatClick(seatId, seatElement) {
-      const state = seatElement.classList.contains('available') ? 'available' :
-        seatElement.classList.contains('occupied') ? 'occupied' : 'selected';
-
-      if (state === 'occupied') {
-        showMessage('이미 예약된 좌석입니다.', 'error');
-        return;
-      }
-
-      // 이전 선택 해제
-      document.querySelectorAll('.seat.selected').forEach(s => {
-        if (s !== seatElement) {
-          s.classList.remove('selected');
-          s.classList.add('available');
+      // 선택 표시
+      document.querySelectorAll('.seat').forEach(s => {
+        if (s.dataset.seatId === seatId) {
+          s.classList.remove('available');
+          s.classList.add('selected');
         }
       });
-
-      // 현재 좌석 선택
-      if (state === 'available') {
-        seatElement.classList.remove('available');
-        seatElement.classList.add('selected');
-        selectedSeat = seatId;
-        showBookingInfo(seatId);
-      }
     }
 
-    // 예매 정보 표시
-    function showBookingInfo(seatId) {
-      const bookingInfo = document.getElementById('bookingInfo');
-      const seatNumber = document.getElementById('seatNumber');
-      const bookingTime = document.getElementById('bookingTime');
-      const timer = document.getElementById('timer');
-
-      seatNumber.textContent = seatId;
-      bookingTime.textContent = new Date().toLocaleTimeString('ko-KR');
-
-      bookingInfo.classList.add('active');
-
-      // 타이머 표시
-      if (seatAvailableTime) {
-        const timeLeft = 1500 - (Date.now() - seatAvailableTime);
-        bookingTimeLimit = seatAvailableTime + 1500;
-
-        const updateTimer = setInterval(() => {
-          const remaining = bookingTimeLimit - Date.now();
-          if (remaining <= 0) {
-            clearInterval(updateTimer);
-            timer.textContent = '시간 초과!';
-            timer.style.color = '#e53e3e';
-          } else {
-            timer.textContent = `남은 시간: ${(remaining / 1000).toFixed(1)}초`;
-            timer.style.color = remaining < 500 ? '#e53e3e' : '#d69e2e';
-          }
-        }, 100);
-      }
-    }
-
-    // 메시지 표시
-    function showMessage(text, type) {
-      const message = document.getElementById('message');
-      message.textContent = text;
-      message.className = `message ${type} active`;
-
-      setTimeout(() => {
-        message.classList.remove('active');
-      }, 3000);
-    }
-
-    // 확인 버튼
-    document.getElementById('confirmBtn').addEventListener('click', () => {
+    // 예매 확인 모달 표시
+    function showBookingConfirm() {
       if (!selectedSeat) return;
 
-      document.getElementById('modal').classList.add('active');
-    });
-
-    // 모달 확인
-    document.getElementById('modalConfirm').addEventListener('click', () => {
-      const modal = document.getElementById('modal');
-      modal.classList.remove('active');
-
-      if (!selectedSeat || !bookingTimeLimit) {
-        showMessage('좌석을 다시 선택해주세요.', 'error');
-        return;
-      }
-
-      const now = Date.now();
-      if (now <= bookingTimeLimit) {
-        showMessage('✅ 예매에 성공했습니다!', 'success');
-
-        // 좌석 상태 업데이트
-        const seats = loadSeatsFromCache();
-        seats[selectedSeat] = 'occupied';
-        saveSeatsToCache(seats);
-
-        // UI 업데이트
-        const seatElement = document.querySelector(`[data-seat-id="${selectedSeat}"]`);
-        if (seatElement) {
-          seatElement.classList.remove('selected', 'available');
-          seatElement.classList.add('occupied');
-        }
-
-        // 예매 정보 숨기기
-        document.getElementById('bookingInfo').classList.remove('active');
-        selectedSeat = null;
-        bookingTimeLimit = null;
-      } else {
-        showMessage('⏰ 시간이 초과되었습니다. 다시 시도해주세요.', 'error');
-
-        // 좌석 상태 복구
-        const seatElement = document.querySelector(`[data-seat-id="${selectedSeat}"]`);
-        if (seatElement) {
-          seatElement.classList.remove('selected');
-          seatElement.classList.add('occupied');
-        }
-
-        document.getElementById('bookingInfo').classList.remove('active');
-        selectedSeat = null;
-        bookingTimeLimit = null;
-      }
-    });
-
-    // 모달 취소
-    document.getElementById('modalCancel').addEventListener('click', () => {
-      document.getElementById('modal').classList.remove('active');
-    });
-
-    // 시간 기반 좌석 상태 계산 (모든 사용자 동기화)
-    function getSeatStatusAtTime(timestamp) {
-      const CYCLE_DURATION = 20000; // 20초 주기
-      const SEAT_OPEN_DURATION = 1500; // 1.5초 오픈
-
-      const cyclePosition = timestamp % CYCLE_DURATION;
-      const isOpen = cyclePosition < SEAT_OPEN_DURATION;
-
-      if (!isOpen) {
-        return null; // 좌석 오픈 안 됨
-      }
-
-      // 현재 사이클의 시작 시각을 시드로 사용
-      const cycleStart = timestamp - cyclePosition;
-
-      // 시드 기반으로 좌석 선택 (deterministic random)
-      const allSeats = [];
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 1; col <= COLS; col++) {
-          allSeats.push(`${ROW_LABELS[row]}${col}`);
-        }
-      }
-
-      // 간단한 해시 함수로 좌석 선택
-      const seatIndex = Math.abs(Math.sin(cycleStart / 1000) * 10000) % allSeats.length;
-      const selectedSeat = allSeats[Math.floor(seatIndex)];
-
-      return {
-        seat: selectedSeat,
-        openTime: cycleStart,
-        closeTime: cycleStart + SEAT_OPEN_DURATION
-      };
+      document.getElementById('confirmSeatId').textContent = selectedSeat;
+      document.getElementById('confirmModal').classList.add('active');
     }
 
-    // 좌석 상태 업데이트 (시간 기반)
-    function updateSeatsBasedOnTime() {
-      const now = Date.now();
-      const seatStatus = getSeatStatusAtTime(now);
-      const seats = loadSeatsFromCache();
+    // 예매 확인 모달 닫기
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').classList.remove('active');
+    }
 
-      // 모든 좌석을 occupied로 초기화
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 1; col <= COLS; col++) {
-          const seatId = `${ROW_LABELS[row]}${col}`;
-          seats[seatId] = 'occupied';
+    // 예매 확정
+    async function confirmBooking() {
+      closeConfirmModal();
+
+      try {
+        const response = await fetch(`${API_URL}/api/book`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nickname: nickname,
+            seatId: selectedSeat
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // 성공 메시지 표시 (유지)
+          const successMsg = document.getElementById('successMessage');
+          successMsg.textContent = `✅ ${data.message} (좌석: ${selectedSeat})`;
+          successMsg.classList.add('active');
+
+          // 좌석 정보 숨기기
+          document.getElementById('bookingInfo').classList.remove('active');
+          selectedSeat = null;
+
+          // 좌석 및 예매 기록 갱신
+          loadSeats();
+          loadBookings();
+        } else {
+          // 실패 메시지
+          document.getElementById('errorMessage').textContent = `❌ ${data.message}`;
         }
+      } catch (error) {
+        console.error('예매 실패:', error);
+        document.getElementById('errorMessage').textContent = '❌ 서버 오류가 발생했습니다.';
       }
-
-      // 현재 오픈된 좌석이 있다면 available로 설정
-      if (seatStatus) {
-        seats[seatStatus.seat] = 'available';
-        seatAvailableTime = seatStatus.openTime;
-
-        const timeRemaining = seatStatus.closeTime - now;
-        console.log(`[${new Date().toLocaleTimeString()}] 좌석 ${seatStatus.seat} 오픈 중 (남은 시간: ${(timeRemaining / 1000).toFixed(1)}초)`);
-      }
-
-      saveSeatsToCache(seats);
-      return seatStatus;
     }
 
-    // 주기적으로 좌석 상태 체크
-    function startTimeBasedUpdates() {
-      const now = Date.now();
-      const CYCLE_DURATION = 20000;
-      const SEAT_OPEN_DURATION = 1500;
+    // 예매 기록 로드
+    async function loadBookings() {
+      try {
+        const response = await fetch(`${API_URL}/api/bookings`);
+        const data = await response.json();
 
-      const cyclePosition = now % CYCLE_DURATION;
+        const list = document.getElementById('bookingsList');
 
-      // 현재 사이클에서 다음 오픈까지 남은 시간
-      let nextCheckDelay;
+        if (data.bookings.length === 0) {
+          list.innerHTML = '<p style="text-align: center; color: #718096;">아직 예매 기록이 없습니다</p>';
+          return;
+        }
 
-      if (cyclePosition < SEAT_OPEN_DURATION) {
-        // 현재 오픈 중 - 닫힐 때 체크
-        nextCheckDelay = SEAT_OPEN_DURATION - cyclePosition + 10;
-        console.log(`[${new Date().toLocaleTimeString()}] 현재 좌석 오픈 중, ${(nextCheckDelay / 1000).toFixed(1)}초 후 마감 체크`);
-      } else {
-        // 닫혀있음 - 다음 사이클까지 대기
-        nextCheckDelay = CYCLE_DURATION - cyclePosition + 10;
-        const nextOpenTime = new Date(now + nextCheckDelay);
-        console.log(`[${new Date().toLocaleTimeString()}] 다음 좌석 오픈: ${nextOpenTime.toLocaleTimeString()}`);
+        list.innerHTML = data.bookings.map(b => `
+                    <div class="booking-item">
+                        <div>
+                            <span class="booking-nickname">${b.nickname}</span>
+                            <span class="booking-seat"> → ${b.seatId}</span>
+                        </div>
+                        <div class="booking-time">${b.time}</div>
+                    </div>
+                `).join('');
+      } catch (error) {
+        console.error('예매 기록 로드 실패:', error);
       }
-
-      setTimeout(() => {
-        updateSeatsBasedOnTime();
-        createSeatsGrid(); // UI 업데이트
-        startTimeBasedUpdates(); // 다음 체크 예약
-      }, nextCheckDelay);
     }
 
-    // 초기화
-    console.log(`[${new Date().toLocaleTimeString()}] 시간 기반 동기화 시작 (모든 사용자 동일한 좌석 표시)`);
-    updateSeatsBasedOnTime();
-    createSeatsGrid();
-    startTimeBasedUpdates();
+    // 엔터키로 닉네임 입력
+    document.getElementById('nicknameInput').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        setNickname();
+      }
+    });
+
+    // 주기적으로 예매 기록 갱신 (10초마다)
+    setInterval(loadBookings, 10000);
   </script>
 </body>
 

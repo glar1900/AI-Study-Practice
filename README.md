@@ -2,97 +2,125 @@
 
 BeautifulSoup과 Selenium (ChromeDriver) 테스트를 위한 티켓팅 시뮬레이션 웹 애플리케이션입니다.
 
-## 📋 기능 설명
+## 📋 주요 기능
 
-- **10x10 좌석 배치** (A1-J10, 영화관 스타일)
-- **랜덤 좌석 오픈**: 10-30초 랜덤 간격으로 1개 좌석이 1초간 예약 가능 상태로 변경
-- **캐시 메커니즘**: `localStorage`를 사용하여 좌석 정보 캐싱 (새로고침해야 업데이트 확인 가능)
-- **예매 플로우**: 좌석 클릭 → 예매 정보 확인 → 확인 버튼 → 모달 확인/취소 → 성공/실패 메시지
-- **시간 제한**: 좌석이 오픈된 후 1초 이내에 예매 완료해야 성공
+- **시간 기반 동기화**: 모든 사용자가 같은 시간에 같은 좌석 표시
+- **닉네임 시스템**: 최초 방문 시 닉네임 입력
+- **예매 기록**: 성공한 예매 내역 표시
+- **캐시 메커니즘**: 수동 새로고침 버튼으로 좌석 정보 업데이트
+- **좌석 오픈 주기**: 20초마다 1.5초간 랜덤 좌석 오픈
 
-## 🚀 로컬 실행
+## 🚀 Vercel 배포 (권장)
 
-### 방법 1: 직접 열기
-```bash
-# index.html을 브라우저에서 직접 열기
-start index.html  # Windows
-open index.html   # Mac
-```
+### 1. GitHub 저장소 생성
 
-### 방법 2: 로컬 서버 실행
-```bash
-# Python 내장 서버
-python -m http.server 8000
-
-# Node.js http-server (설치 필요)
-npx http-server -p 8000
-```
-
-그 후 브라우저에서 `http://localhost:8000` 접속
-
-## 🌐 배포 방법
-
-### Vercel 배포
-
-1. **Vercel CLI 설치**
-```bash
-npm i -g vercel
-```
-
-2. **배포**
-```bash
-cd ticketing-sim
-vercel
-```
-
-3. 프롬프트에 따라 설정 (기본값으로 진행해도 무방)
-
-### GitHub Pages 배포
-
-1. **GitHub 저장소 생성**
 ```bash
 git init
 git add .
 git commit -m "Initial commit: 티켓팅 시뮬레이션"
-git branch -M main
-git remote add origin https://github.com/your-username/ticketing-sim.git
+git remote add origin https://github.com/유저명/ticketing-sim.git
 git push -u origin main
 ```
 
-2. **GitHub Pages 활성화**
-- GitHub 저장소 → Settings → Pages
-- Source: `main` 브랜치 선택
-- 폴더: `/ (root)` 선택
-- Save 클릭
+### 2. Vercel에 배포
 
-3. 몇 분 후 `https://your-username.github.io/ticketing-sim/` 에서 접속 가능
+1. [vercel.com](https://vercel.com) 접속
+2. **GitHub 계정으로 로그인**
+3. **New Project** 클릭
+4. GitHub 저장소 `ticketing-sim` Import
+5. **Deploy** 클릭 (설정 변경 불필요)
+6. 완료! 자동으로 URL 생성됨
 
-## 🤖 웹 크롤링 실습 예제
+### 3. 자동 배포
 
-### BeautifulSoup 예제
+이후 GitHub에 푸시할 때마다 Vercel이 자동으로 재배포합니다:
 
-```python
-import requests
-from bs4 import BeautifulSoup
-import time
-
-url = "http://localhost:8000"  # 또는 배포된 URL
-
-# 좌석 정보 크롤링
-response = requests.get(url)
-soup = BeautifulSoup(response.content, 'html.parser')
-
-# 좌석 찾기
-seats = soup.find_all('button', class_='seat')
-
-print(f"총 좌석 수: {len(seats)}")
-
-# 예약 가능한 좌석 찾기
-available_seats = [s for s in seats if 'available' in s.get('class', [])]
-print(f"예약 가능 좌석: {[s.get('data-seat-id') for s in available_seats]}")
+```bash
+git add .
+git commit -m "Update features"
+git push
 ```
 
-### Selenium (ChromeDriver) 예제
+## 💻 로컬 개발 (선택사항)
+
+```bash
+# 의존성 설치
+npm install
+
+# 개발 서버 시작
+npm run dev
+
+# 브라우저에서 열기
+# http://localhost:3000
+```
+
+## 📡 API 엔드포인트
+
+### GET /api/seats
+좌석 상태 조회
+
+**Response:**
+```json
+{
+  "seats": {
+    "A1": "occupied",
+    "B5": "available",
+    "C3": "booked"
+  },
+  "currentOpen": {
+    "seat": "B5",
+    "openTime": 1234567890000,
+    "closeTime": 1234567891500
+  },
+  "timestamp": 1234567890123
+}
+```
+
+### POST /api/book
+좌석 예매
+
+**Request:**
+```json
+{
+  "nickname": "홍길동",
+  "seatId": "B5"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "예매에 성공했습니다!",
+  "booking": {
+    "nickname": "홍길동",
+    "seatId": "B5",
+    "timestamp": 1234567890123,
+    "time": "2025-12-12 20:48:00"
+  }
+}
+```
+
+### GET /api/bookings
+예매 기록 조회
+
+**Response:**
+```json
+{
+  "bookings": [
+    {
+      "nickname": "홍길동",
+      "seatId": "B5",
+      "timestamp": 1234567890123,
+      "time": "2025-12-12 20:48:00"
+    }
+  ]
+}
+```
+
+## 🤖 웹 크롤링 실습
+
+### Selenium 예제
 
 ```python
 from selenium import webdriver
@@ -101,116 +129,115 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# ChromeDriver 초기화
 driver = webdriver.Chrome()
-driver.get("http://localhost:8000")  # 또는 배포된 URL
 
-try:
-    # 좌석 정보 읽기
-    seats = driver.find_elements(By.CLASS_NAME, "seat")
-    print(f"총 좌석 수: {len(seats)}")
-    
-    # localStorage 캐시 확인
-    cache = driver.execute_script("return localStorage.getItem('ticketing_seat_cache');")
-    print(f"캐시된 좌석 정보: {cache[:100]}...")
-    
-    # 예약 가능한 좌석 찾기 (주기적으로 새로고침)
-    found_available = False
-    attempts = 0
-    max_attempts = 20
-    
-    while not found_available and attempts < max_attempts:
-        driver.refresh()
-        time.sleep(1)
-        
-        available_seats = driver.find_elements(By.CSS_SELECTOR, ".seat.available")
-        
-        if available_seats:
-            print(f"\\n예약 가능 좌석 발견! 시도 횟수: {attempts + 1}")
-            seat = available_seats[0]
-            seat_id = seat.get_attribute('data-seat-id')
-            print(f"좌석 번호: {seat_id}")
-            
-            # 좌석 클릭
-            seat.click()
-            time.sleep(0.2)
-            
-            # 확인 버튼 클릭
-            confirm_btn = driver.find_element(By.ID, "confirmBtn")
-            confirm_btn.click()
-            time.sleep(0.1)
-            
-            # 모달 확인 클릭
-            modal_confirm = driver.find_element(By.ID, "modalConfirm")
-            modal_confirm.click()
-            time.sleep(0.5)
-            
-            # 결과 확인
-            message = driver.find_element(By.ID, "message")
-            if message.is_displayed():
-                print(f"결과: {message.text}")
-                found_available = True
-            
-        attempts += 1
-        
-        if not found_available:
-            print(f"시도 {attempts}/{max_attempts}: 예약 가능 좌석 없음, 5초 후 재시도...")
-            time.sleep(5)
-    
-    if not found_available:
-        print("\\n예약 가능한 좌석을 찾지 못했습니다.")
+# 배포된 URL 사용
+driver.get("https://your-app.vercel.app")
 
-finally:
-    input("\\n엔터를 누르면 브라우저가 종료됩니다...")
-    driver.quit()
+# 닉네임 입력
+nickname_input = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.ID, "nicknameInput"))
+)
+nickname_input.send_keys("크롤러봇")
+driver.find_element(By.CSS_SELECTOR, ".btn-confirm").click()
+
+time.sleep(1)
+
+# 좌석 모니터링
+while True:
+    # 새로고침 버튼 클릭
+    refresh_btn = driver.find_element(By.ID, "refreshBtn")
+    refresh_btn.click()
+    time.sleep(0.5)
+    
+    # 예약 가능한 좌석 찾기
+    available_seats = driver.find_elements(By.CSS_SELECTOR, ".seat.available")
+    
+    if available_seats:
+        print(f"발견! {available_seats[0].text}")
+        available_seats[0].click()
+        time.sleep(0.2)
+        
+        # 확인 버튼 클릭
+        driver.find_element(By.CSS_SELECTOR, ".btn-primary").click()
+        time.sleep(0.1)
+        
+        # 모달 확인
+        driver.find_element(By.CSS_SELECTOR, ".btn-confirm").click()
+        time.sleep(0.5)
+        
+        # 결과 확인
+        success_msg = driver.find_element(By.ID, "successMessage")
+        if success_msg.is_displayed():
+            print(f"성공: {success_msg.text}")
+            break
+    
+    time.sleep(2)
+
+driver.quit()
 ```
 
-### 크롤링 실습 팁
+### BeautifulSoup + requests 예제
 
-1. **캐시 메커니즘 이해하기**
-   - `localStorage`에 좌석 정보가 저장됨
-   - JavaScript로 캐시 읽기: `localStorage.getItem('ticketing_seat_cache')`
-   - 새로고침해야 UI에 반영됨
+```python
+import requests
+from bs4 import BeautifulSoup
+import time
 
-2. **타이밍 공략하기**
-   - 좌석은 1초만 유효하므로 빠른 반응 필요
-   - Selenium으로 자동화 시 클릭 속도 최적화 필요
+url = "https://your-app.vercel.app"
 
-3. **무한 루프 방지**
-   - 최대 시도 횟수 설정
-   - 적절한 대기 시간 (너무 짧으면 서버 부하, 너무 길면 좌석 놓침)
-
-4. **개발자 도구 활용**
-   - F12 → Console에서 좌석 오픈 로그 확인 가능
-   - Network 탭에서 리소스 로딩 확인
+while True:
+    # 좌석 정보 가져오기
+    resp = requests.get(f"{url}/api/seats")
+    data = resp.json()
+    
+    # 예약 가능한 좌석 찾기
+    available = [seat_id for seat_id, status in data['seats'].items() 
+                 if status == 'available']
+    
+    if available:
+        seat_id = available[0]
+        print(f"좌석 발견: {seat_id}")
+        
+        # 예매 시도
+        book_resp = requests.post(f"{url}/api/book", json={
+            "nickname": "API봇",
+            "seatId": seat_id
+        })
+        
+        result = book_resp.json()
+        print(f"결과: {result['message']}")
+        
+        if result['success']:
+            break
+    
+    time.sleep(1)
+```
 
 ## 📂 파일 구조
 
 ```
 ticketing-sim/
-├── index.html      # 메인 애플리케이션 (HTML + CSS + JavaScript)
-├── vercel.json     # Vercel 배포 설정
-└── README.md       # 이 파일
+├── index.html          # 프론트엔드
+├── api/
+│   └── index.js       # Vercel Serverless Functions
+├── server.js          # 로컬 개발용 Express 서버
+├── package.json       # 의존성
+├── vercel.json        # Vercel 배포 설정
+└── README.md          # 이 파일
 ```
 
-## 🛠️ 기술 스택
+## 💡 참고사항
 
-- **HTML5**: 시맨틱 마크업
-- **CSS3**: 그라디언트, 애니메이션, Flexbox/Grid 레이아웃
-- **Vanilla JavaScript**: localStorage, 이벤트 처리, 타이머
-- **Google Fonts**: Noto Sans KR
+### Vercel Serverless Functions 제한사항
+- **상태 공유 안됨**: 각 함수 인스턴스가 독립적
+- **현재 구현**: 인메모리 저장 (재배포 시 데이터 초기화)
+- **프로덕션**: Redis 또는 데이터베이스 사용 권장
 
-## 💡 학습 포인트
-
-1. **정적 웹 페이지 크롤링**: BeautifulSoup으로 HTML 파싱
-2. **동적 콘텐츠 처리**: Selenium으로 JavaScript 실행 결과 크롤링
-3. **캐시 메커니즘**: localStorage 데이터 접근
-4. **타이밍 최적화**: 짧은 시간 내에 작업 완료하기
-5. **예외 처리**: 좌석이 없을 때, 타임아웃 시 처리
-
-## 📞 문의
-
-웹 크롤링 스터디에서 활용하시면서 문제가 있으시면 언제든 연락주세요!
+### 크롤링 실습 팁
+1. **캐시 이해하기**: 새로고침 버튼 클릭해야 최신 데이터
+2. **타이밍**: 1.5초 내에 클릭 → 확인 → 모달 확인 완료해야 성공
+3. **동시 접속**: 여러 크롤러 실행하여 경쟁 테스트 가능
 
 ---
 
