@@ -533,8 +533,8 @@
 
       // 타이머 표시
       if (seatAvailableTime) {
-        const timeLeft = 1000 - (Date.now() - seatAvailableTime);
-        bookingTimeLimit = seatAvailableTime + 1000;
+        const timeLeft = 1500 - (Date.now() - seatAvailableTime);
+        bookingTimeLimit = seatAvailableTime + 1500;
 
         const updateTimer = setInterval(() => {
           const remaining = bookingTimeLimit - Date.now();
@@ -629,8 +629,8 @@
       if (currentOpenSeat && seatOpenTime) {
         const elapsed = now - seatOpenTime;
 
-        if (elapsed >= 1000) {
-          // 1초가 지났으면 좌석 닫기
+        if (elapsed >= 1500) {
+          // 1.5초가 지났으면 좌석 닫기
           const seats = loadSeatsFromCache();
           if (seats[currentOpenSeat] === 'available') {
             seats[currentOpenSeat] = 'occupied';
@@ -640,7 +640,7 @@
           localStorage.removeItem(SEAT_OPEN_TIME_KEY);
         } else {
           // 아직 1초가 안 지났으면 남은 시간 후 닫기
-          const remainingTime = 1000 - elapsed;
+          const remainingTime = 1500 - elapsed;
           seatAvailableTime = seatOpenTime;
 
           setTimeout(() => {
@@ -682,7 +682,7 @@
           }
           localStorage.removeItem(CURRENT_OPEN_SEAT_KEY);
           localStorage.removeItem(SEAT_OPEN_TIME_KEY);
-        }, 1000);
+        }, 1500);
       }
 
       // 다음 오픈 시간 계산 및 저장 (10-30초)
